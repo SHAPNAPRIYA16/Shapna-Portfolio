@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shapnapriya Sekar — AppSec Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #161616;
+      --surface3: #1a1f1a;
+      --border: rgba(255,255,255,0.07);
+      --border-green: rgba(0,255,136,0.2);
+      --green: #00ff88;
+      --green-dim: #00cc6a;
+      --green-dark: rgba(0,255,136,0.08);
+      --text: #ffffff;
+      --text-muted: #a0a0a0;
+      --text-dim: #555;
+      --font-main: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-main); font-size: 15px; line-height: 1.7; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: rgba(10,10,10,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 500; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-logo .shield { color: var(--green); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.slash::before { content: '/ '; color: var(--green); }
+    .nav-icon { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; transition: color 0.2s; }
+    .nav-icon:hover { color: var(--green); }
+    .nav-connect { font-family: var(--font-mono); font-size: 0.78rem; padding: 0.55rem 1.3rem; background: transparent; border: 1px solid var(--green); color: var(--green); border-radius: 4px; text-decoration: none; transition: all 0.2s; }
+    .nav-connect:hover { background: var(--green); color: var(--bg); }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 7rem 3rem 4rem; position: relative; overflow: hidden; }
+    #hero::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(0,255,136,0.04) 0%, transparent 70%); pointer-events: none; }
+    .hero-status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.9rem; background: rgba(0,255,136,0.08); border: 1px solid var(--border-green); border-radius: 20px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--green); margin-bottom: 2.5rem; width: fit-content; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    .hero-hi { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.1; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+    .hero-name { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+    .hero-name .last { color: var(--text-dim); }
+    .hero-role { font-family: var(--font-mono); font-size: clamp(1rem, 2vw, 1.3rem); color: var(--green); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards; }
+    .hero-role::before { content: '>_ '; }
+    .hero-desc { max-width: 560px; color: var(--text-muted); font-size: 1rem; font-weight: 300; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease 0.5s forwards; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 4px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; }
+    .btn-green { background: var(--green); color: var(--bg); font-weight: 600; }
+    .btn-green:hover { background: var(--green-dim); }
+    .btn-outline { background: transparent; border-color: var(--border); color: var(--text-muted); }
+    .btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* SECTIONS */
+    section { padding: 5rem 3rem; position: relative; }
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem; }
+    .section-icon { color: var(--green); font-size: 1.3rem; }
+    .section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; letter-spacing: 0.02em; }
+    .section-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border-green), transparent); }
+
+    /* ABOUT */
+    #about { background: var(--bg); }
+    .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
+    .about-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; }
+    .about-card p { color: var(--text-muted); font-weight: 300; margin-bottom: 1.2rem; }
+    .about-meta { display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .meta-item { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+    .meta-item .icon { color: var(--green); }
+    .side-cards { display: flex; flex-direction: column; gap: 1rem; }
+    .info-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+    .info-card-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--green); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
+    .info-card p { color: var(--text-muted); font-size: 0.88rem; font-weight: 300; }
+
+    /* EXPERIENCE */
+    #experience { background: var(--surface); }
+    .exp-layout { display: grid; grid-template-columns: 200px auto 1fr; gap: 0; margin-bottom: 2rem; }
+    .exp-date-col { display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end; padding-right: 2rem; padding-top: 0.3rem; }
+    .exp-date { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--text); text-align: right; }
+    .exp-location { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); text-align: right; }
+    .exp-connector { display: flex; flex-direction: column; align-items: center; padding-right: 2rem; }
+    .exp-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); flex-shrink: 0; margin-top: 0.35rem; }
+    .exp-line-v { flex: 1; width: 1px; background: var(--border-green); margin-top: 0.5rem; }
+    .exp-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; }
+    .exp-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .exp-company { font-family: var(--font-mono); font-size: 0.82rem; color: var(--green); margin-bottom: 1.2rem; }
+    .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .exp-bullets li { color: var(--text-muted); font-size: 0.9rem; font-weight: 300; display: flex; align-items: flex-start; gap: 0.7rem; }
+    .exp-bullets li::before { content: '•'; color: var(--green); flex-shrink: 0; }
+
+    /* ACHIEVEMENTS */
+    #achievements { background: var(--bg); }
+    .achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .achievement-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; display: flex; gap: 1rem; align-items: flex-start; transition: border-color 0.2s, background 0.2s; }
+    .achievement-card:hover { border-color: var(--border-green); background: var(--surface3); }
+    .ach-icon { color: var(--green); font-size: 1.2rem; flex-shrink: 0; }
+    .achievement-card p { color: var(--text-muted); font-size: 0.9rem; font-weight: 300; }
+
+    /* SKILLS */
+    #skills { background: var(--surface); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+    .skill-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; transition: border-color 0.2s; }
+    .skill-card:hover { border-color: var(--border-green); }
+    .skill-cat { font-family: var(--font-mono); font-size: 0.72rem; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag { padding: 0.3rem 0.75rem; background: rgba(0,255,136,0.06); border: 1px solid rgba(0,255,136,0.15); border-radius: 3px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); transition: all 0.2s; }
+    .skill-tag:hover { background: rgba(0,255,136,0.12); color: var(--green); }
+
+    /* EDUCATION */
+    #education { background: var(--bg); }
+    .edu-cards { display: flex; flex-direction: column; gap: 1.2rem; max-width: 700px; }
+    .edu-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; transition: border-color 0.2s; }
+    .edu-card:hover { border-color: var(--border-green); }
+    .edu-degree { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .edu-school { font-family: var(--font-mono); font-size: 0.78rem; color: var(--green); margin-bottom: 0.25rem; }
+    .edu-detail { font-size: 0.82rem; color: var(--text-dim); }
+    .edu-year { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); white-space: nowrap; text-align: right; }
+    .certs-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--green); margin-bottom: 1rem; margin-top: 2.5rem; }
+    .certs-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .cert-badge { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.2rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); transition: border-color 0.2s; }
+    .cert-badge:hover { border-color: var(--border-green); color: var(--green); }
+    .cert-icon { color: var(--green); }
+
+    /* CONNECT */
+    #connect { background: var(--surface); }
+    .connect-inner { max-width: 600px; }
+    .connect-desc { color: var(--text-muted); font-weight: 300; margin-bottom: 2.5rem; }
+    .connect-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .connect-link { display: flex; align-items: center; gap: 0.6rem; padding: 1rem 1.8rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: all 0.2s; }
+    .connect-link:hover { border-color: var(--green); color: var(--green); background: var(--green-dark); }
+
+    /* FOOTER */
+    footer { padding: 1.5rem 3rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .footer-mono { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 0 5px rgba(0,255,136,0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 6rem 1.5rem 3rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .exp-layout { grid-template-columns: 1fr; }
+      .exp-date-col { align-items: flex-start; flex-direction: row; gap: 1rem; padding-right: 0; margin-bottom: 0.5rem; }
+      .exp-connector { display: none; }
+      .achievements-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+    @media (max-width: 520px) {
+      .nav-links { display: none; }
+      .edu-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#hero" class="nav-logo"><span class="shield">⬡</span> S.S_</a>
+    <ul class="nav-links">
+      <li><a href="#about" class="slash">About</a></li>
+      <li><a href="#experience" class="slash">Experience</a></li>
+      <li><a href="#skills" class="slash">Skills</a></li>
+      <li><a href="#education" class="slash">Education</a></li>
+      <li><a href="https://github.com/SHAPNAPRIYA16" target="_blank" class="nav-icon">⌥</a></li>
+      <li><a href="https://www.linkedin.com/in/shapnapriya-sekar-a1a81320b/" target="_blank" class="nav-icon" style="font-family:var(--font-mono);font-size:0.78rem;font-weight:600;">in</a></li>
+    </ul>
+    <a href="#connect" class="nav-connect">Connect</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-status"><span class="status-dot"></span>System Status: Secure</div>
+    <div class="hero-hi">Hi, I'm</div>
+    <div class="hero-name">Shapnapriya <span class="last">Sekar</span></div>
+    <div class="hero-role">Application Security Engineer</div>
+    <p class="hero-desc">Securing modern architectures. Identifying vulnerabilities before they become threats. Building resilient systems with robust AppSec practices.</p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn btn-green">View Directives ↓</a>
+      <a href="mailto:shapnasekar16@gmail.com" class="btn btn-outline">✉ Contact Protocol</a>
+      <a href="https://github.com/SHAPNAPRIYA16" target="_blank" class="btn btn-outline">⌥ GitHub</a>
+      <a href="https://www.linkedin.com/in/shapnapriya-sekar-a1a81320b/" target="_blank" class="btn btn-outline">in LinkedIn</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-icon">✓</span>
+      <h2 class="section-title">PROFILE_OVERVIEW</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <p>Application Security Engineer with a strong foundation in identifying, analyzing, and mitigating security vulnerabilities across modern software architectures. Passionate about secure coding practices, CI/CD pipeline integration, and fostering a security-first culture within development teams.</p>
+        <p>Proven experience leveraging industry-standard tools to protect critical assets. Solid understanding of the SDLC and Agile methodologies with hands-on expertise in SAST/DAST, penetration testing, and automated vulnerability management.</p>
+        <div class="about-meta">
+          <div class="meta-item"><span class="icon">◎</span> Chennai, India</div>
+          <div class="meta-item"><span class="icon">✉</span> shapnasekar16@gmail.com</div>
+          <div class="meta-item"><span class="icon">☎</span> +91 93445 10935</div>
+        </div>
+      </div>
+      <div class="side-cards">
+        <div class="info-card reveal">
+          <div class="info-card-title"><span>⬡</span> Key Objective</div>
+          <p>Integrating security seamlessly into the SDLC to enable rapid, safe deployments.</p>
+        </div>
+        <div class="info-card reveal">
+          <div class="info-card-title"><span>⚙</span> Core Focus</div>
+          <p>SAST/DAST, Penetration Testing, and automated vulnerability management.</p>
+        </div>
+        <div class="info-card reveal">
+          <div class="info-card-title"><span>◈</span> Current Role</div>
+          <p>Application Security Engineer at Tata Consultancy Services (TCS), Chennai.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-header reveal">
+      <span class="section-icon">⊞</span>
+      <h2 class="section-title">OPERATIONAL_HISTORY</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="exp-layout reveal">
+      <div class="exp-date-col">
+        <div class="exp-date">Dec 2024 – Present</div>
+        <div class="exp-location">Chennai, India</div>
+      </div>
+      <div class="exp-connector">
+        <div class="exp-dot"></div>
+        <div class="exp-line-v"></div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-title">Application Security Engineer</div>
+        <div class="exp-company">Tata Consultancy Services (TCS)</div>
+        <ul class="exp-bullets">
+          <li>Conducted automated SAST using Snyk, analyzing source code to identify and mitigate OWASP Top 10 vulnerabilities.</li>
+          <li>Performed comprehensive vulnerability assessments and penetration testing using tools like Burp Suite, Synopsis, Coverity, Nmap, and Nessus.</li>
+          <li>Integrated Snyk SCA to detect and resolve vulnerabilities within Open Source Software (OSS) dependencies.</li>
+          <li>Configured and maintained CI pipelines utilizing Jenkins and TeamCity for continuous security testing.</li>
+          <li>Implemented secure coding practices, focusing on robust access management and data encryption.</li>
+          <li>Managed source code versions securely using Git, GitHub, and Bitbucket within Agile SDLC methodologies.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-layout reveal" style="margin-top:1rem;">
+      <div class="exp-date-col">
+        <div class="exp-date">Jan 2024 – Apr 2024</div>
+        <div class="exp-location">Chennai, India</div>
+      </div>
+      <div class="exp-connector">
+        <div class="exp-dot"></div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-title">Cognitive AI — Intern</div>
+        <div class="exp-company">AI-Based Solar Panel Hotspot Detection Project</div>
+        <ul class="exp-bullets">
+          <li>Learned and applied image processing techniques for thermal image analysis.</li>
+          <li>Designed and developed an AI-based solution to detect hotspots in solar panels using thermal imaging data.</li>
+          <li>Performed image enhancement, feature extraction, and anomaly detection on thermal images.</li>
+          <li>Built a complete application with frontend for visualization and backend for processing and result handling.</li>
+          <li>Collaborated on integrating AI logic into a full-stack system, improving practical understanding of real-world AI workflows.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements">
+    <div class="section-header reveal">
+      <span class="section-icon">✦</span>
+      <h2 class="section-title">KEY_ACHIEVEMENTS</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="achievements-grid">
+      <div class="achievement-card reveal">
+        <span class="ach-icon">⬡</span>
+        <p>Mentored team members on secure coding practices and the mitigation of OWASP Top 10 vulnerabilities.</p>
+      </div>
+      <div class="achievement-card reveal">
+        <span class="ach-icon">⬡</span>
+        <p>Led incident response efforts for critical security vulnerabilities, minimizing potential impact.</p>
+      </div>
+      <div class="achievement-card reveal">
+        <span class="ach-icon">⬡</span>
+        <p>Conducted regular application security training sessions to elevate team awareness.</p>
+      </div>
+      <div class="achievement-card reveal">
+        <span class="ach-icon">⬡</span>
+        <p>Developed a Bash script that successfully suppressed over 600 false-positive vulnerabilities, drastically reducing alert fatigue.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-icon">◈</span>
+      <h2 class="section-title">CAPABILITY_MATRIX</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-cat">Security Practices</div>
+        <div class="skill-tags">
+          <span class="skill-tag">SAST</span><span class="skill-tag">DAST</span><span class="skill-tag">Vulnerability Assessment</span><span class="skill-tag">Penetration Testing</span><span class="skill-tag">OWASP Top 10</span><span class="skill-tag">SCA</span><span class="skill-tag">Secure Code Review</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-cat">Security Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Snyk</span><span class="skill-tag">Checkmarx</span><span class="skill-tag">Burp Suite</span><span class="skill-tag">Synopsis</span><span class="skill-tag">Coverity</span><span class="skill-tag">Nmap</span><span class="skill-tag">Nessus</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-cat">Programming Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">C</span><span class="skill-tag">Bash</span><span class="skill-tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-cat">DevSecOps & CI/CD</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Jenkins</span><span class="skill-tag">TeamCity</span><span class="skill-tag">Azure DevOps</span><span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">Bitbucket</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-cat">Cloud & Database</div>
+        <div class="skill-tags">
+          <span class="skill-tag">AWS</span><span class="skill-tag">SQL</span><span class="skill-tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-cat">AI Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">GitHub Copilot</span><span class="skill-tag">Cursor</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-header reveal">
+      <span class="section-icon">◎</span>
+      <h2 class="section-title">EDUCATION_LOG</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="edu-cards">
+      <div class="edu-card reveal">
+        <div>
+          <div class="edu-degree">Bachelor of Engineering — ECE</div>
+          <div class="edu-school">R.M.K Engineering College</div>
+          <div class="edu-detail">Electrical and Communication Engineering · Chennai, Tamil Nadu</div>
+        </div>
+        <div class="edu-year">Apr 2024<br/>Graduated</div>
+      </div>
+    </div>
+    <div class="certs-label reveal">✦ Certifications</div>
+    <div class="certs-grid reveal">
+      <div class="cert-badge"><span class="cert-icon">⬡</span> Snyk Technical Certification</div>
+      <div class="cert-badge"><span class="cert-icon">⬡</span> AI For Everyone</div>
+      <div class="cert-badge"><span class="cert-icon">⬡</span> NPTEL — Java &amp; Python for Data Science</div>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section id="connect">
+    <div class="section-header reveal">
+      <span class="section-icon">⟢</span>
+      <h2 class="section-title">ESTABLISH_CONNECTION</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="connect-inner">
+      <p class="connect-desc reveal">Open to AppSec roles, security collaborations, and professional conversations. Drop a message — I'll respond promptly.</p>
+      <div class="connect-links reveal">
+        <a href="mailto:shapnasekar16@gmail.com" class="connect-link">✉ shapnasekar16@gmail.com</a>
+        <a href="https://github.com/SHAPNAPRIYA16" target="_blank" class="connect-link">⌥ GitHub</a>
+        <a href="https://www.linkedin.com/in/shapnapriya-sekar-a1a81320b/" target="_blank" class="connect-link">in LinkedIn</a>
+        <a href="tel:+919344510935" class="connect-link">☎ +91 93445 10935</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-mono">© 2025 Shapnapriya Sekar · AppSec Engineer</span>
+    <span class="footer-mono">Chennai, India · shapnasekar16@gmail.com</span>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a.slash');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 150) current = s.getAttribute('id'); });
+      navLinks.forEach(a => { a.style.color = a.getAttribute('href').replace('#','') === current ? 'var(--green)' : ''; });
+    });
+  </script>
+</body>
+</html>
